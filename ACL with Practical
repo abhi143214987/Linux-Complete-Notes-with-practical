@@ -81,7 +81,6 @@ setfacl -m d:u:user2:rw /data
 # Verify default ACLs
 getfacl /data
 
-
 Now any new file in /data will automatically inherit ACLs.
 
 
