@@ -1,13 +1,14 @@
 # ACL (Access Control List)
 
 ## 📖 What is ACL?
-ACL is used when we want to provide **different permissions to multiple users or groups** on the same file/directory.  
-This is not possible with standard `chmod`.
+ACL is used when we want to provide **different permissions to multiple users or groups** on the same file/directory.
 
 **Example:**
 - `user1` → read/write  
 - `user2` → only read  
-- `user3` → no access  
+- `user3` → no access 
+  
+This is not possible with standard `chmod`.
 
 ---
 
