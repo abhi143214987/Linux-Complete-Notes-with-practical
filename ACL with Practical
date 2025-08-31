@@ -1,0 +1,86 @@
+# ACL (Access Control List)
+
+## 📖 What is ACL?
+ACL is used when we want to provide **different permissions to multiple users or groups** on the same file/directory.  
+This is not possible with standard `chmod`.
+
+**Example:**
+- `user1` → read/write  
+- `user2` → only read  
+- `user3` → no access  
+
+---
+
+## 🔹 When to Use ACL
+- Shared project directories where multiple users need different levels of access.  
+- Collaboration: Example → 5 developers on one file (some read-only, some read-write).  
+- Compliance/Security: Give audit team read-only access to sensitive logs without changing ownership.  
+
+---
+
+## ⚙️ Practical Hands-on
+
+### 1️⃣ Setup
+```bash
+# Create a directory and a file
+mkdir acl_demo
+cd acl_demo
+echo "Top Secret Data" > secret.txt
+
+# Check default permissions
+ls -l
+
+
+2️⃣ Add ACL Permission
+
+
+# Give user1 read+write access
+setfacl -m u:user1:rw secret.txt
+
+# Give user2 only read access
+setfacl -m u:user2:r secret.txt
+
+
+3️⃣ Verify ACL
+
+getfacl secret.txt
+
+
+✅ Example output:
+
+
+# file: secret.txt
+# owner: root
+# group: root
+user::rw-
+user:user1:rw-
+user:user2:r--
+group::r--
+mask::rw-
+other::r--
+
+
+4️⃣ Remove ACL
+
+# Remove user1 ACL
+setfacl -x u:user1 secret.txt
+
+# Remove all ACLs
+setfacl -b secret.txt
+
+
+Default ACLs for New Files:
+
+In a shared directory /data, every new file created should automatically give user1 and user2 read/write access.
+
+# Set default ACLs
+setfacl -m d:u:user1:rw /data
+setfacl -m d:u:user2:rw /data
+
+# Verify default ACLs
+getfacl /data
+
+
+Now any new file in /data will automatically inherit ACLs.
+
+
