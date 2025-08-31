@@ -1,0 +1,118 @@
+# `chattr` and `lsattr`
+
+## 📖 What are `chattr` and `lsattr`?
+
+This is used to set special attribute on the file/directory so no one can delete, rename and modfied file, even root user can’t do anything
+
+- **`chattr` (Change Attribute):** Used to set special attributes on files/directories in Linux.  
+- **`lsattr` (List Attribute):** Used to view those attributes.  
+
+These attributes provide **extra control** over files beyond normal `chmod`/`ACL`.  
+---
+
+## 🔹 Common Attributes
+- `i` → Immutable: File cannot be modified, deleted, renamed, or linked.  
+- `a` → Append-only: File can only be appended to (no overwriting/deleting).  
+- `d` → No dump: File will not be backed up by `dump`.  
+- `A` → No atime update: Access time is not updated.  
+- `s` → Secure delete (file blocks zeroed on deletion).  
+---
+
+## ⚙️ Practical Hands-on
+
+### 1️⃣ Make a file immutable
+
+# Create a test file
+echo "Test Data" > demo.txt
+
+# Make it immutable
+chattr +i demo.txt
+
+# Verify attributes
+lsattr demo.txt
+
+✅ Now:
+
+You cannot edit (vi, echo >>, etc).
+You cannot delete.
+You cannot rename.
+
+# Try editing/deleting (will fail)
+echo "New Data" >> demo.txt
+rm demo.txt
+
+
+# Try editing/deleting (will fail)
+echo "New Data" >> demo.txt
+rm demo.txt
+
+2️⃣ Remove immutable attribute
+
+chattr -i demo.txt
+lsattr demo.txt
+
+
+3️⃣ Append-only file
+
+# Make append-only
+chattr +a demo.txt
+lsattr demo.txt
+
+# Allowed: append
+
+echo "Appending only" >> demo.txt
+
+# Not allowed: overwrite
+> demo.txt   # will fail
+
+
+Real-Time Scenarios
+📌 Scenario 1: Protect Critical Config Files
+
+System admin wants to protect /etc/passwd from accidental deletion or modification.
+
+chattr +i /etc/passwd
+lsattr /etc/passwd
+
+Now even root cannot delete/modify unless attribute is removed.
+
+
+📌 Scenario 2: Secure Log Files
+
+We want to ensure that logs (/var/log/secure) can only be appended to (no one can erase or overwrite old logs).
+
+chattr +a /var/log/secure
+lsattr /var/log/secure
+
+
+📌 Scenario 3: Troubleshooting Issue
+
+User reports:
+
+"I cannot delete or edit a file, even though I have full permissions (rw)."
+
+Steps:
+
+1. Check file attributes:
+
+lsattr file.txt
+
+2. If you see ----i---------, file is immutable.
+
+3. Fix
+
+chattr -i file.txt
+
+
+📌 Scenario 4: Shared Directory Protection
+
+You have a shared directory where users should not accidentally delete a critical script.
+
+chattr +i /shared/script.sh
+
+
+
+
+
+
+
