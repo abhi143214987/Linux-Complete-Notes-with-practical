@@ -1,0 +1,56 @@
+# 📌 Sticky Bit in Linux
+
+## 📖 What is Sticky Bit?
+- Sticky Bit is a **special permission** used **only on directories**.
+- It prevents users from deleting or renaming **files owned by others** in a shared directory.
+- Symbol in `ls -l`: `t` at the end of permissions.
+
+Example:  
+drwxrwxrwt 10 root root 4096 Aug 31 12:20 /tmp
+
+
+👉 The `t` at the end means sticky bit is set.
+
+---
+
+## ⚡ Real-time Use
+- Used in **shared directories** like `/tmp`.  
+- Without sticky bit → any user could delete another user’s files.  
+- With sticky bit → only **file owner or root** can delete/rename the file.
+
+---
+
+## 🔨 Practical Example
+
+### Step 1: Create a shared directory
+```bash
+mkdir /tmp/shared_dir
+chmod 777 /tmp/shared_dir
+
+Step 2: Add sticky bit
+
+chmod +t /tmp/shared_dir
+ls -ld /tmp/shared_dir
+# drwxrwxrwt 2 root root 4096 Aug 31 12:20 /tmp/shared_dir
+
+
+Step 3: Test with two users
+
+# Login as user1
+su - user1
+cd /tmp/shared_dir
+touch file_user1.txt
+
+# Login as user2
+su - user2
+cd /tmp/shared_dir
+touch file_user2.txt
+
+# user1 tries to delete user2’s file
+rm file_user2.txt
+# Permission denied ❌
+
+# user1 can delete their own file
+rm file_user1.txt   # ✅ works
+
+
