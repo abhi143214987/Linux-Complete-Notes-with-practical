@@ -3,6 +3,9 @@
 ## 📖 What is Sticky Bit?
 - Sticky Bit is a **special permission** used **only on directories**.
 - It prevents users from deleting or renaming **files owned by others** in a shared directory.
+It says:
+👉 "Inside this directory, only the owner of a file (or root) can delete/rename it, even if others have write permission on the directory."
+
 - Symbol in `ls -l`: `t` at the end of permissions.
 
 Example:  
